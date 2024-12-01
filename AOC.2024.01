@@ -1,0 +1,149 @@
+*
+   GIT.FILENAME = 'AOC.2024.01'
+   GIT.REPO = 'https://github.com/Krowemoh/AOC-2024.git'
+*
+   EQU TRUE TO 1
+   EQU FALSE TO 0
+*
+   YEAR = 2024
+   DAY = 1
+*
+   AOC.ID = YEAR : '*' : DAY
+*
+   OPEN '','AOC-PUZZLE-FILE' TO AOC.PUZZLE.FILE ELSE
+      PRINT 'Unable to open file: AOC-PUZZLE-FILE - Press RETURN':
+      INPUT ANYTHING
+      STOP
+   END
+*
+   READ RAW.DATA FROM AOC.PUZZLE.FILE,AOC.ID ELSE
+      PRINT 'No Puzzle Input.'
+      STOP
+   END
+*
+*TEMP    GOSUB TEST.DATA
+*
+   GOSUB 100
+*
+   GOSUB 200
+*
+   STOP
+*
+*********************  S U B R O U T I N E  *********************
+*
+TEST.DATA:NULL
+*
+   RAW.DATA = ''
+   RAW.DATA<-1> = '3   4'
+   RAW.DATA<-1> = '4   3'
+   RAW.DATA<-1> = '2   5'
+   RAW.DATA<-1> = '1   3'
+   RAW.DATA<-1> = '3   9'
+   RAW.DATA<-1> = '3   3'
+*
+   RETURN
+*
+*********************  S U B R O U T I N E  *********************
+*
+100:NULL
+*
+   ANS = ''
+*
+   RAW.DATA = TRIM(RAW.DATA)
+   CONVERT ' ' TO @VM IN RAW.DATA
+   NUMBER.OF.LINES = DCOUNT(RAW.DATA,@AM)
+*
+   LEFT.LIST = ''
+   RIGHT.LIST = ''
+*
+   FOR I = 1 TO NUMBER.OF.LINES
+      LINE = RAW.DATA<I>
+*
+      L = LINE<1,1>
+      R = LINE<1,2>
+*
+      LOCATE(L,LEFT.LIST,1;ANYPOS;'AR') THEN
+         LEFT.LIST = INSERT(LEFT.LIST,1,ANYPOS;L)
+      END ELSE
+         LEFT.LIST = INSERT(LEFT.LIST,1,ANYPOS;L)
+      END
+*
+      LOCATE(R,RIGHT.LIST,1;ANYPOS;'AR') THEN
+         RIGHT.LIST = INSERT(RIGHT.LIST,1,ANYPOS;R)
+      END ELSE
+         RIGHT.LIST = INSERT(RIGHT.LIST,1,ANYPOS;R)
+      END
+   NEXT I
+*
+   S = 0
+*
+   FOR I = 1 TO NUMBER.OF.LINES
+      L = LEFT.LIST<1,I>
+      R = RIGHT.LIST<1,I>
+*
+      D = L - R
+*
+      IF D < 0 THEN
+         D = D * -1
+      END
+*
+      S = S + D
+   NEXT I
+*
+   ANS = S
+*
+   PRINT 'Part 1 ANS: ' : ANS
+*
+   RETURN
+*
+*********************  S U B R O U T I N E  *********************
+*
+200:NULL
+*
+   ANS = ''
+*
+   RAW.DATA = TRIM(RAW.DATA)
+   CONVERT ' ' TO @VM IN RAW.DATA
+   NUMBER.OF.LINES = DCOUNT(RAW.DATA,@AM)
+*
+   LEFT.LIST = ''
+   RIGHT.LIST = ''
+*
+   FOR I = 1 TO NUMBER.OF.LINES
+      LINE = RAW.DATA<I>
+*
+      L = LINE<1,1>
+      R = LINE<1,2>
+*
+      LOCATE(L,LEFT.LIST,1;ANYPOS;'AR') THEN
+         LEFT.LIST = INSERT(LEFT.LIST,1,ANYPOS;L)
+      END ELSE
+         LEFT.LIST = INSERT(LEFT.LIST,1,ANYPOS;L)
+      END
+*
+      LOCATE(R,RIGHT.LIST,1;ANYPOS;'AR') THEN
+         RIGHT.LIST = INSERT(RIGHT.LIST,1,ANYPOS;R)
+      END ELSE
+         RIGHT.LIST = INSERT(RIGHT.LIST,1,ANYPOS;R)
+      END
+   NEXT I
+*
+   SUM = 0
+*
+   FOR I = 1 TO NUMBER.OF.LINES
+      L = LEFT.LIST<1,I>
+      SIM = COUNT(RIGHT.LIST,L)
+      SCORE = L * SIM
+      SUM = SUM + SCORE
+   NEXT I
+*
+   ANS = SUM
+*
+   PRINT 'Part 2 ANS: ' : ANS
+*
+   RETURN
+*
+* END OF PROGRAM
+*
+   END
+*
