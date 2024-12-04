@@ -1,0 +1,134 @@
+*
+   GIT.FILENAME = 'AOC.2024.03'
+   GIT.REPO = 'https://github.com/Krowemoh/AOC-2024.git'
+*
+   EQU TRUE TO 1
+   EQU FALSE TO 0
+*
+   YEAR = 2024
+   DAY = 3
+*
+   AOC.ID = YEAR : '*' : DAY
+*
+   OPEN '','AOC-PUZZLE-FILE' TO AOC.PUZZLE.FILE ELSE
+      PRINT 'Unable to open file: AOC-PUZZLE-FILE - Press RETURN':
+      INPUT ANYTHING
+      STOP
+   END
+*
+   READ RAW.DATA FROM AOC.PUZZLE.FILE,AOC.ID ELSE
+      PRINT 'No Puzzle Input.'
+      STOP
+   END
+*
+*TEMP    GOSUB TEST.DATA1
+   GOSUB 100
+*
+*TEMP    GOSUB TEST.DATA2
+   GOSUB 200
+*
+   STOP
+*
+*********************  S U B R O U T I N E  *********************
+*
+TEST.DATA1:NULL
+*
+   RAW.DATA = 'xmul(2,4)%&mul[3,7]!@^do_not_mul(5,5)+mul(32,64]then(mul(11,8)mul(8,5))'
+*
+   RETURN
+*
+*********************  S U B R O U T I N E  *********************
+*
+TEST.DATA2:NULL
+*
+   RAW.DATA = "xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+mul(32,64](mul(11,8)undo()?mul(8,5))"
+*
+   RETURN
+*
+*********************  S U B R O U T I N E  *********************
+*
+100:NULL
+*
+   ANS = 0
+*
+   PATTERN = "0X'mul('0N','0N')'0X"
+*
+   LINE = RAW.DATA
+*
+   LOOP UNTIL NOT(LINE MATCHES PATTERN) DO
+      ONE = MATCHFIELD(LINE,PATTERN,1)
+      TWO = MATCHFIELD(LINE,PATTERN,2)
+      THREE = MATCHFIELD(LINE,PATTERN,3)
+      FOUR = MATCHFIELD(LINE,PATTERN,4)
+      FIVE = MATCHFIELD(LINE,PATTERN,5)
+      SIX = MATCHFIELD(LINE,PATTERN,6)
+      SEVEN = MATCHFIELD(LINE,PATTERN,7)
+*
+      ANS = ANS + (THREE * FIVE)
+*
+      LINE = SEVEN
+   REPEAT
+*
+   PRINT 'Part 1 ANS: ' : ANS
+*
+   RETURN
+*
+*********************  S U B R O U T I N E  *********************
+*
+200:NULL
+*
+   ANS = 0
+*
+   PATTERN = "0X'mul('0N','0N')'0X"
+*
+   LINE = RAW.DATA
+*
+   LINE = "do()" : LINE
+   ENABLE.MUL = FALSE
+*
+   LOOP UNTIL NOT(LINE MATCHES PATTERN) DO
+      ONE = MATCHFIELD(LINE,PATTERN,1)
+      TWO = MATCHFIELD(LINE,PATTERN,2)
+      THREE = MATCHFIELD(LINE,PATTERN,3)
+      FOUR = MATCHFIELD(LINE,PATTERN,4)
+      FIVE = MATCHFIELD(LINE,PATTERN,5)
+      SIX = MATCHFIELD(LINE,PATTERN,6)
+      SEVEN = MATCHFIELD(LINE,PATTERN,7)
+*
+      DO.MUL = COUNT(ONE,"do()")
+      DONT.MUL = COUNT(ONE,"don't()")
+*
+      DO.MUL.POS = INDEX(ONE,"do()",DO.MUL)
+      DONT.MUL.POS = INDEX(ONE,"don't()",DONT.MUL)
+*
+      IF DO.MUL = 0 AND DONT.MUL = 0 THEN
+         NULL
+*
+      END ELSE IF DO.MUL # 0 AND DONT.MUL = 0 THEN
+         ENABLE.MUL = TRUE
+*
+      END ELSE IF DO.MUL = 0 AND DONT.MUL # 0 THEN
+         ENABLE.MUL = FALSE
+*
+      END ELSE IF (DO.MUL.POS > DONT.MUL.POS) THEN
+         ENABLE.MUL = TRUE
+*
+      END ELSE IF (DO.MUL.POS < DONT.MUL.POS) THEN
+         ENABLE.MUL = FALSE
+      END
+*
+      IF ENABLE.MUL THEN
+         ANS = ANS + THREE * FIVE
+      END
+*
+      LINE = SEVEN
+   REPEAT
+*
+   PRINT 'Part 2 ANS: ' : ANS
+*
+   RETURN
+*
+* END OF PROGRAM
+*
+   END
+*
