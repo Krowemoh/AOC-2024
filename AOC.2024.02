@@ -1,0 +1,126 @@
+*
+   GIT.FILENAME = 'AOC.2024.02'
+   GIT.REPO = 'https://github.com/Krowemoh/AOC-2024.git'
+*
+   EQU TRUE TO 1
+   EQU FALSE TO 0
+*
+   YEAR = 2024
+   DAY = 2
+*
+   AOC.ID = YEAR : '*' : DAY
+*
+   OPEN '','AOC-PUZZLE-FILE' TO AOC.PUZZLE.FILE ELSE
+      PRINT 'Unable to open file: AOC-PUZZLE-FILE - Press RETURN':
+      INPUT ANYTHING
+      STOP
+   END
+*
+   READ RAW.DATA FROM AOC.PUZZLE.FILE,AOC.ID ELSE
+      PRINT 'No Puzzle Input.'
+      STOP
+   END
+*
+   GOSUB TEST.DATA
+*
+   GOSUB 100
+*
+   GOSUB 200
+*
+   STOP
+*
+*********************  S U B R O U T I N E  *********************
+*
+TEST.DATA:NULL
+*
+   RAW.DATA = ''
+   RAW.DATA<-1> = '7 6 4 2 1'
+   RAW.DATA<-1> = '1 2 7 8 9'
+   RAW.DATA<-1> = '9 7 6 2 1'
+   RAW.DATA<-1> = '1 3 2 4 5'
+   RAW.DATA<-1> = '8 6 4 4 1'
+   RAW.DATA<-1> = '1 3 6 7 9'
+*
+   RETURN
+*
+*********************  S U B R O U T I N E  *********************
+*
+100:NULL
+*
+   ANS = 0
+*
+   CONVERT ' ' TO @VM IN RAW.DATA
+*
+   NUMBER.OF.LINES = DCOUNT(RAW.DATA,@AM)
+*
+   FOR I = 1 TO NUMBER.OF.LINES
+      LINE = RAW.DATA<I>
+*
+      NUMBER.OF.VALUES = DCOUNT(LINE,@VM)
+*
+      PREV.VALUE = LINE<1,1>
+      VALUE = LINE<1,2>
+*
+      IF VALUE = PREV.VALUE THEN
+         CONTINUE
+      END
+*
+      IF VALUE > PREV.VALUE THEN
+         DIRECTION = 'ASC'
+      END ELSE
+         DIRECTION = 'DESC'
+      END
+*
+      PROCEED = TRUE
+*
+      FOR J = 2 TO NUMBER.OF.VALUES
+         VALUE = LINE<1,J>
+*
+         DIFF = VALUE - PREV.VALUE
+         IF DIFF < 0 THEN DIFF = DIFF * -1
+*
+         BEGIN CASE
+            CASE VALUE = PREV.VALUE
+               PROCEED = FALSE
+*
+            CASE DIRECTION = 'ASC' AND VALUE < PREV.VALUE
+               PROCEED = FALSE
+*
+            CASE DIRECTION = 'DESC' AND VALUE > PREV.VALUE
+               PROCEED = FALSE
+*
+            CASE DIFF < 1
+               PROCEED = FALSE
+*
+            CASE DIFF > 3
+               PROCEED = FALSE
+         END CASE
+*
+         PREV.VALUE = VALUE
+      NEXT J
+*
+      IF PROCEED THEN
+         ANS = ANS + 1
+         PRINT LINE
+      END
+*
+   NEXT I
+*
+   PRINT 'Part 1 ANS: ' : ANS
+*
+   RETURN
+*
+*********************  S U B R O U T I N E  *********************
+*
+200:NULL
+*
+   ANS = ''
+*
+   PRINT 'Part 2 ANS: ' : ANS
+*
+   RETURN
+*
+* END OF PROGRAM
+*
+   END
+*
