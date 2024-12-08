@@ -1,0 +1,218 @@
+*
+   GIT.FILENAME = 'AOC.2024.05'
+   GIT.REPO = 'https://github.com/Krowemoh/AOC-2024.git'
+*
+   EQU TRUE TO 1
+   EQU FALSE TO 0
+*
+   YEAR = 2024
+   DAY = 5
+*
+   AOC.ID = YEAR : '*' : DAY
+*
+   OPEN '','AOC-PUZZLE-FILE' TO AOC.PUZZLE.FILE ELSE
+      PRINT 'Unable to open file: AOC-PUZZLE-FILE - Press RETURN':
+      INPUT ANYTHING
+      STOP
+   END
+*
+   READ RAW.DATA FROM AOC.PUZZLE.FILE,AOC.ID ELSE
+      PRINT 'No Puzzle Input.'
+      STOP
+   END
+*
+   GOSUB TEST.DATA
+*
+   GOSUB 100
+*
+   GOSUB 200
+*
+   STOP
+*
+*********************  S U B R O U T I N E  *********************
+*
+TEST.DATA:NULL
+*
+   RAW.DATA = ''
+   RAW.DATA<-1> = '47|53'
+   RAW.DATA<-1> = '97|13'
+   RAW.DATA<-1> = '97|61'
+   RAW.DATA<-1> = '97|47'
+   RAW.DATA<-1> = '75|29'
+   RAW.DATA<-1> = '61|13'
+   RAW.DATA<-1> = '75|53'
+   RAW.DATA<-1> = '29|13'
+   RAW.DATA<-1> = '97|29'
+   RAW.DATA<-1> = '53|29'
+   RAW.DATA<-1> = '61|53'
+   RAW.DATA<-1> = '97|53'
+   RAW.DATA<-1> = '61|29'
+   RAW.DATA<-1> = '47|13'
+   RAW.DATA<-1> = '75|47'
+   RAW.DATA<-1> = '97|75'
+   RAW.DATA<-1> = '47|61'
+   RAW.DATA<-1> = '75|61'
+   RAW.DATA<-1> = '47|29'
+   RAW.DATA<-1> = '75|13'
+   RAW.DATA<-1> = '53|13'
+   RAW.DATA<-1> = '-'
+   RAW.DATA<-1> = '75,47,61,53,29'
+   RAW.DATA<-1> = '97,61,53,29,13'
+   RAW.DATA<-1> = '75,29,13'
+   RAW.DATA<-1> = '75,97,47,61,53'
+   RAW.DATA<-1> = '61,13,29'
+   RAW.DATA<-1> = '97,13,75,29,47'
+*
+   RETURN
+*
+*********************  S U B R O U T I N E  *********************
+*
+100:NULL
+*
+   ANS = 0
+*
+   RULES = ''
+*
+   SECTION.1 = FIELD(RAW.DATA,'-',1)
+   SECTION.2 = FIELD(RAW.DATA,'-',2)
+*
+   NUMBER.OF.RULES = DCOUNT(SECTION.1,@AM)
+*
+   FOR I = 1 TO NUMBER.OF.RULES
+      LINE = SECTION.1<I>
+      CONVERT '|' TO @VM IN LINE
+      R = LINE<1,1>
+      V = LINE<1,2>
+      LOCATE(R,RULES<1>,1;RULE.POS) THEN
+         RULES<2,RULE.POS,-1> = V
+      END ELSE
+         RULES<1,-1> = R
+         RULES<2,-1> = V
+      END
+   NEXT I
+*
+   NUMBER.OF.RULES = DCOUNT(RULES<1>,@VM)
+*
+   FOR I = 1 TO NUMBER.OF.RULES - 1
+*TEMP       PRINT RULES<1,I> : ' - ' : RULES<2,I>
+   NEXT I
+*
+*
+   NUMBER.OF.UPDATES = DCOUNT(SECTION.2,@AM)
+*
+   FOR I = 2 TO NUMBER.OF.UPDATES
+      LINE = SECTION.2<I>
+      CONVERT ',' TO @VM IN LINE
+*
+      NUMBER.OF.PAGES = DCOUNT(LINE,@VM)
+*
+      PROCEED = TRUE
+*
+      FOR J = 1 TO NUMBER.OF.PAGES
+         PAGE = LINE<1,J>
+*
+         LOCATE(PAGE,RULES<1>,1;RULE.POS) ELSE
+            CONTINUE
+         END
+*
+         AFTERS = RULES<2,RULE.POS>
+         NUMBER.OF.AFTERS = DCOUNT(AFTERS,@SVM)
+*
+         FOR K = 1 TO NUMBER.OF.AFTERS
+            LOCATE(AFTERS<1,1,K>,LINE<1>,1;ANYPOS) ELSE
+               CONTINUE
+            END
+            IF ANYPOS < J THEN
+               PROCEED = FALSE
+            END
+         NEXT K
+      NEXT J
+*
+      IF PROCEED = TRUE THEN
+         ANS = ANS + LINE<1,NUMBER.OF.PAGES/2+0.5>
+      END
+   NEXT I
+*
+   PRINT 'Part 1 ANS: ' : ANS
+*
+   RETURN
+*
+*********************  S U B R O U T I N E  *********************
+*
+200:NULL
+*
+   ANS = 0
+*
+   RULES = ''
+*
+   SECTION.1 = FIELD(RAW.DATA,'-',1)
+   SECTION.2 = FIELD(RAW.DATA,'-',2)
+*
+   NUMBER.OF.RULES = DCOUNT(SECTION.1,@AM)
+*
+   FOR I = 1 TO NUMBER.OF.RULES
+      LINE = SECTION.1<I>
+      CONVERT '|' TO @VM IN LINE
+      R = LINE<1,1>
+      V = LINE<1,2>
+      LOCATE(R,RULES<1>,1;RULE.POS) THEN
+         RULES<2,RULE.POS,-1> = V
+      END ELSE
+         RULES<1,-1> = R
+         RULES<2,-1> = V
+      END
+   NEXT I
+*
+   NUMBER.OF.RULES = DCOUNT(RULES<1>,@VM)
+*
+   FOR I = 1 TO NUMBER.OF.RULES - 1
+*TEMP       PRINT RULES<1,I> : ' - ' : RULES<2,I>
+   NEXT I
+*
+*
+   NUMBER.OF.UPDATES = DCOUNT(SECTION.2,@AM)
+*
+   FOR I = 2 TO NUMBER.OF.UPDATES
+      LINE = SECTION.2<I>
+      CONVERT ',' TO @VM IN LINE
+*
+      NUMBER.OF.PAGES = DCOUNT(LINE,@VM)
+*
+      PROCEED = TRUE
+*
+      FOR J = 1 TO NUMBER.OF.PAGES
+         PAGE = LINE<1,J>
+*
+         LOCATE(PAGE,RULES<1>,1;RULE.POS) ELSE
+            CONTINUE
+         END
+*
+         AFTERS = RULES<2,RULE.POS>
+         NUMBER.OF.AFTERS = DCOUNT(AFTERS,@SVM)
+*
+         FOR K = 1 TO NUMBER.OF.AFTERS
+            LOCATE(AFTERS<1,1,K>,LINE<1>,1;ANYPOS) ELSE
+               CONTINUE
+            END
+            IF ANYPOS < J THEN
+               PROCEED = FALSE
+               LINE<1,J> = AFTERS<1,1,K>
+               LINE<1,ANYPOS> = PAGE
+               J = 1
+            END
+         NEXT K
+      NEXT J
+*
+      IF PROCEED = FALSE THEN
+         ANS = ANS + LINE<1,NUMBER.OF.PAGES/2+0.5>
+      END
+   NEXT I
+*
+   PRINT 'Part 2 ANS: ' : ANS
+*
+   RETURN
+*
+* END OF PROGRAM
+*
+   END
+*
