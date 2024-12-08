@@ -1,0 +1,157 @@
+*
+   GIT.FILENAME = 'AOC.2024.06'
+   GIT.REPO = 'https://github.com/Krowemoh/AOC-2024.git'
+*
+   EQU TRUE TO 1
+   EQU FALSE TO 0
+*
+   YEAR = 2024
+   DAY = 6
+*
+   AOC.ID = YEAR : '*' : DAY
+*
+   OPEN '','AOC-PUZZLE-FILE' TO AOC.PUZZLE.FILE ELSE
+      PRINT 'Unable to open file: AOC-PUZZLE-FILE - Press RETURN':
+      INPUT ANYTHING
+      STOP
+   END
+*
+   READ RAW.DATA FROM AOC.PUZZLE.FILE,AOC.ID ELSE
+      PRINT 'No Puzzle Input.'
+      STOP
+   END
+*
+*TEMP    GOSUB TEST.DATA
+*
+   GOSUB 100
+*
+   GOSUB 200
+*
+   STOP
+*
+*********************  S U B R O U T I N E  *********************
+*
+TEST.DATA:NULL
+*
+   RAW.DATA = ''
+   RAW.DATA<-1> = '....#.....'
+   RAW.DATA<-1> = '.........#'
+   RAW.DATA<-1> = '..........'
+   RAW.DATA<-1> = '..#.......'
+   RAW.DATA<-1> = '.......#..'
+   RAW.DATA<-1> = '..........'
+   RAW.DATA<-1> = '.#..^.....'
+   RAW.DATA<-1> = '........#.'
+   RAW.DATA<-1> = '#.........'
+   RAW.DATA<-1> = '......#...'
+*
+   RETURN
+*
+*********************  S U B R O U T I N E  *********************
+*
+100:NULL
+*
+   ANS = ''
+*
+   NUMBER.OF.LINES = DCOUNT(RAW.DATA,@AM)
+   NUMBER.OF.COLS = LEN(RAW.DATA<1>)
+*
+   FOR I = 1 TO NUMBER.OF.LINES
+      LINE = RAW.DATA<I>
+*
+      IF INDEX(LINE,'^',1) = 0 THEN
+         CONTINUE
+      END
+*
+      X = INDEX(LINE,'^',1)
+      Y = I
+      DIR = 'UP'
+      EXIT
+   NEXT I
+*
+   DONE = FALSE
+*
+   STEPS = 0
+*
+   LOCATIONS = ''
+*
+   LOOP UNTIL DONE DO
+      LOCATION = RAW.DATA<Y>[X,1]
+*
+      IF LOCATION # '#' THEN
+         LOC = X : ',' : Y
+         LOCATE(LOC,LOCATIONS,1;ANYPOS) ELSE
+            LOCATIONS<1,-1> = LOC
+            STEPS = STEPS + 1
+         END
+*
+      END ELSE
+         BEGIN CASE
+            CASE DIR = 'UP'
+               Y = Y + 1
+               DIR = 'RIGHT'
+*
+            CASE DIR = 'RIGHT'
+               X = X - 1
+               DIR = 'DOWN'
+*
+            CASE DIR = 'DOWN'
+               Y = Y - 1
+               DIR = 'LEFT'
+*
+            CASE DIR = 'LEFT'
+               X = X + 1
+               DIR = 'UP'
+         END CASE
+      END
+*
+      IF DIR = 'UP' THEN
+         Y = Y - 1
+         IF Y < 1 THEN
+            DONE = TRUE
+         END
+      END
+*
+      IF DIR = 'DOWN' THEN
+         Y = Y + 1
+         IF Y > NUMBER.OF.LINES THEN
+            DONE = TRUE
+         END
+      END
+*
+      IF DIR = 'LEFT' THEN
+         X = X - 1
+         IF X < 1 THEN
+            DONE = TRUE
+         END
+      END
+*
+      IF DIR = 'RIGHT' THEN
+         X = X + 1
+         IF X > NUMBER.OF.COLS THEN
+            DONE = TRUE
+         END
+      END
+*
+*
+   REPEAT
+*
+*
+   PRINT 'Part 1 ANS: ' : STEPS
+*
+   RETURN
+*
+*********************  S U B R O U T I N E  *********************
+*
+200:NULL
+*
+   ANS = ''
+*
+   PRINT 'Part 2 ANS: ' : ANS
+*
+   RETURN
+*
+* END OF PROGRAM
+*
+   END
+*
