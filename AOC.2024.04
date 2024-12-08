@@ -1,0 +1,274 @@
+*
+   GIT.FILENAME = 'AOC.2024.04'
+   GIT.REPO = 'https://github.com/Krowemoh/AOC-2024.git'
+*
+   EQU TRUE TO 1
+   EQU FALSE TO 0
+*
+   YEAR = 2024
+   DAY = 4
+*
+   AOC.ID = YEAR : '*' : DAY
+*
+   OPEN '','AOC-PUZZLE-FILE' TO AOC.PUZZLE.FILE ELSE
+      PRINT 'Unable to open file: AOC-PUZZLE-FILE - Press RETURN':
+      INPUT ANYTHING
+      STOP
+   END
+*
+   READ RAW.DATA FROM AOC.PUZZLE.FILE,AOC.ID ELSE
+      PRINT 'No Puzzle Input.'
+      STOP
+   END
+*
+*TEMP    GOSUB TEST.DATA
+*
+   GOSUB 100
+*
+   GOSUB 200
+*
+   STOP
+*
+*********************  S U B R O U T I N E  *********************
+*
+TEST.DATA:NULL
+*
+   RAW.DATA = ''
+*
+   RAW.DATA<-1> = 'MMMSXXMASM'
+   RAW.DATA<-1> = 'MSAMXMSMSA'
+   RAW.DATA<-1> = 'AMXSXMAAMM'
+   RAW.DATA<-1> = 'MSAMASMSMX'
+   RAW.DATA<-1> = 'XMASAMXAMM'
+   RAW.DATA<-1> = 'XXAMMXXAMA'
+   RAW.DATA<-1> = 'SMSMSASXSS'
+   RAW.DATA<-1> = 'SAXAMASAAA'
+   RAW.DATA<-1> = 'MAMMMXMMMM'
+   RAW.DATA<-1> = 'MXMXAXMASX'
+*
+   RETURN
+*
+*********************  S U B R O U T I N E  *********************
+*
+100:NULL
+*
+   ANS = 0
+*
+   NUMBER.OF.ROWS = DCOUNT(RAW.DATA,@AM)
+   NUMBER.OF.COLS = LEN(RAW.DATA<1>)
+*
+   FOR I = 1 TO NUMBER.OF.ROWS
+      FOR J = 1 TO NUMBER.OF.COLS
+*
+* HORIZONTAL RIGHT
+*
+         XMAS = ''
+         FOR K = 0 TO 3
+            IF J+K > NUMBER.OF.COLS THEN
+               XMAS = ''
+               EXIT
+            END
+            XMAS = XMAS : RAW.DATA<I>[J+K,1]
+         NEXT K
+*
+         IF XMAS = 'XMAS' THEN
+            ANS = ANS + 1
+         END
+*
+* HORIZONTAL LEFT
+*
+         XMAS = ''
+         FOR K = 0 TO 3
+            IF J-K < 1 THEN
+               XMAS = ''
+               EXIT
+            END
+            XMAS = XMAS : RAW.DATA<I>[J-K,1]
+         NEXT K
+*
+         IF XMAS = 'XMAS' THEN
+            ANS = ANS + 1
+         END
+*
+* VERTICAL DOWN
+*
+         XMAS = ''
+         FOR K = 0 TO 3
+            IF I+K > NUMBER.OF.ROWS THEN
+               XMAS = ''
+               EXIT
+            END
+            XMAS = XMAS : RAW.DATA<I+K>[J,1]
+         NEXT K
+*
+         IF XMAS = 'XMAS' THEN
+            ANS = ANS + 1
+         END
+*
+* VERTICAL UP
+*
+         XMAS = ''
+         FOR K = 0 TO 3
+            IF I-K < 1 THEN
+               XMAS = ''
+               EXIT
+            END
+            XMAS = XMAS : RAW.DATA<I-K>[J,1]
+         NEXT K
+*
+         IF XMAS = 'XMAS' THEN
+            ANS = ANS + 1
+         END
+*
+* DIAGONAL UP RIGHT
+*
+         XMAS = ''
+         FOR K = 0 TO 3
+            IF J+K > NUMBER.OF.COLS THEN
+               XMAS = ''
+               EXIT
+            END
+            IF I-K < 1 THEN
+               XMAS = ''
+               EXIT
+            END
+*
+            XMAS = XMAS : RAW.DATA<I-K>[J+K,1]
+         NEXT K
+*
+         IF XMAS = 'XMAS' THEN
+            ANS = ANS + 1
+         END
+*
+* DIAGONAL DOWN RIGHT
+*
+         XMAS = ''
+         FOR K = 0 TO 3
+            IF J+K > NUMBER.OF.COLS THEN
+               XMAS = ''
+               EXIT
+            END
+            IF I+K > NUMBER.OF.ROWS THEN
+               XMAS = ''
+               EXIT
+            END
+*
+            XMAS = XMAS : RAW.DATA<I+K>[J+K,1]
+         NEXT K
+*
+         IF XMAS = 'XMAS' THEN
+            ANS = ANS + 1
+         END
+*
+* DIAGONAL UP LEFT
+*
+         XMAS = ''
+         FOR K = 0 TO 3
+            IF I-K < 1 THEN
+               XMAS = ''
+               EXIT
+            END
+            IF J-K < 1 THEN
+               XMAS = ''
+               EXIT
+            END
+            XMAS = XMAS : RAW.DATA<I-K>[J-K,1]
+         NEXT K
+*
+         IF XMAS = 'XMAS' THEN
+            ANS = ANS + 1
+         END
+*
+* DIAGONAL DOWN LEFT
+*
+         XMAS = ''
+         FOR K = 0 TO 3
+            IF I+K > NUMBER.OF.ROWS THEN
+               XMAS = ''
+               EXIT
+            END
+            IF J-K < 1 THEN
+               XMAS = ''
+               EXIT
+            END
+            XMAS = XMAS : RAW.DATA<I+K>[J-K,1]
+         NEXT K
+*
+         IF XMAS = 'XMAS' THEN
+            ANS = ANS + 1
+         END
+*
+      NEXT J
+   NEXT I
+*
+   PRINT 'Part 1 ANS: ' : ANS
+*
+   RETURN
+*
+*********************  S U B R O U T I N E  *********************
+*
+200:NULL
+*
+   ANS = 0
+*
+   NUMBER.OF.ROWS = DCOUNT(RAW.DATA,@AM)
+   NUMBER.OF.COLS = LEN(RAW.DATA<1>)
+*
+   FOR I = 1 TO NUMBER.OF.ROWS
+      FOR J = 1 TO NUMBER.OF.COLS
+*
+         C = RAW.DATA<I>[J,1]
+*
+* DIAGONAL LEFT
+*
+         TOP.LEFT = RAW.DATA<I-1>[J-1,1]
+         BOTTOM.RIGHT = RAW.DATA<I+1>[J+1,1]
+*
+         MAS = TOP.LEFT : C : BOTTOM.RIGHT
+*
+         IF J-1 < 1 OR J+1 > NUMBER.OF.COLS THEN
+            MAS = ''
+         END
+         IF I-K < 1 OR I+1 > NUMBER.OF.ROWS THEN
+            MAS = ''
+         END
+*
+         CROSS.1 = FALSE
+         IF MAS = 'MAS' OR MAS = 'SAM' THEN
+            CROSS.1 = TRUE
+         END
+*
+* DIAGONAL RIGHT
+*
+         TOP.RIGHT = RAW.DATA<I-1>[J+1,1]
+         BOTTOM.LEFT = RAW.DATA<I+1>[J-1,1]
+*
+         MAS = TOP.RIGHT : C : BOTTOM.LEFT
+*
+         IF J-1 < 1 OR J+1 > NUMBER.OF.COLS THEN
+            MAS = ''
+         END
+         IF I-K < 1 OR I+1 > NUMBER.OF.ROWS THEN
+            MAS = ''
+         END
+*
+         CROSS.2 = FALSE
+         IF MAS = 'MAS' OR MAS = 'SAM' THEN
+            CROSS.2 = TRUE
+         END
+*
+         IF CROSS.1 AND CROSS.2 THEN
+            ANS = ANS + 1
+         END
+*
+      NEXT J
+   NEXT I
+*
+   PRINT 'Part 2 ANS: ' : ANS
+*
+   RETURN
+*
+* END OF PROGRAM
+*
+   END
+*
