@@ -1,0 +1,121 @@
+*
+   GIT.FILENAME = 'AOC.2024.09'
+   GIT.REPO = 'https://github.com/Krowemoh/AOC-2024.git'
+*
+   EQU TRUE TO 1
+   EQU FALSE TO 0
+*
+   YEAR = 2024
+   DAY = 9
+*
+   AOC.ID = YEAR : '*' : DAY
+*
+   OPEN '','AOC-PUZZLE-FILE' TO AOC.PUZZLE.FILE ELSE
+      PRINT 'Unable to open file: AOC-PUZZLE-FILE - Press RETURN':
+      INPUT ANYTHING
+      STOP
+   END
+*
+   READ RAW.DATA FROM AOC.PUZZLE.FILE,AOC.ID ELSE
+      PRINT 'No Puzzle Input.'
+      STOP
+   END
+*
+*TEMP    GOSUB TEST.DATA
+*
+   GOSUB 100
+*
+   GOSUB 200
+*
+   STOP
+*
+*********************  S U B R O U T I N E  *********************
+*
+TEST.DATA:NULL
+*
+   RAW.DATA = ''
+*
+   RAW.DATA = '2333133121414131402'
+*
+   RETURN
+*
+*********************  S U B R O U T I N E  *********************
+*
+100:NULL
+*
+   ANS = ''
+*
+   X = ''
+*
+   NUMBER.OF.LETTERS = LEN(RAW.DATA)
+*
+   ID = 0
+   IS.FILE = TRUE
+*
+   FOR LETTER.CTR = 1 TO NUMBER.OF.LETTERS
+      C = RAW.DATA[LETTER.CTR,1]
+*
+      IF IS.FILE THEN
+         FOR I = 1 TO C
+            X<-1> = ID
+         NEXT I
+         ID = ID + 1
+         IS.FILE = NOT(IS.FILE)
+      END ELSE
+         FOR I = 1 TO C
+            X<-1> = '.'
+         NEXT I
+         IS.FILE = NOT(IS.FILE)
+      END
+   NEXT LETTER.CTR
+*
+   FRONT.CTR = 1
+   BACK.CTR = DCOUNT(X,@AM)
+*
+   DONE = FALSE
+*
+   LOOP UNTIL DONE DO
+      LOOP
+         F = X<FRONT.CTR>
+      UNTIL F = '.' OR FRONT.CTR >= BACK.CTR DO
+         FRONT.CTR = FRONT.CTR + 1
+      REPEAT
+*
+      LOOP
+         B = X<BACK.CTR>
+      UNTIL B # '.' OR BACK.CTR =< FRONT.CTR DO
+         BACK.CTR = BACK.CTR - 1
+      REPEAT
+*
+      IF FRONT.CTR >= BACK.CTR OR BACK.CTR =< FRONT.CTR THEN
+         DONE = TRUE
+      END
+*
+      PRINT FRONT.CTR, BACK.CTR
+      X<FRONT.CTR> = X<BACK.CTR>
+      X<BACK.CTR> = '.'
+   REPEAT
+*
+   FOR I = 1 TO LEN(X)
+      ANS = ANS + (I-1) * X<I>
+   NEXT I
+*
+*TEMP    PRINT X
+   PRINT 'Part 1 ANS: ' : ANS
+*
+   RETURN
+*
+*********************  S U B R O U T I N E  *********************
+*
+200:NULL
+*
+   ANS = ''
+*
+   PRINT 'Part 2 ANS: ' : ANS
+*
+   RETURN
+*
+* END OF PROGRAM
+*
+   END
+*
