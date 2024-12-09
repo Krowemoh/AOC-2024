@@ -1,0 +1,75 @@
+*
+   GIT.FILENAME = 'AOC.2024.07.GENERATE'
+   GIT.REPO = 'https://github.com/Krowemoh/AOC-2024.git'
+*
+   EQU ENV.SIZE TO 5000
+   DIM ENV(ENV.SIZE)
+*
+   MAT ENV = ''
+*
+   OPEN '','AOC-TEMP' TO AOC.TEMP.FILE ELSE
+      PRINT 'Unable to open file: AOC-TEMP':
+      STOP
+   END
+*
+   FOR G = 1 TO 11
+      PRINT 'Generating: ' : G
+      MAX = G
+      RECORD = ''
+      GOSUB GENERATE.PROGRAM
+*
+*TEMP       WRITE RESULT ON AOC.TEMP.FILE,G
+   NEXT G
+*
+   STOP
+*
+*********************  S U B R O U T I N E  *********************
+*
+GENERATE.PROGRAM:NULL
+*
+   RECORD = ''
+*
+   RECORD<-1> = \OP = ''\
+*
+   FOR I = 1 TO MAX
+      RECORD<-1> = \OP<-1> = '+' : @VM : '*' : @VM : '|'\
+   NEXT I
+*
+   RECORD<-1> = \X = ''\
+*
+   FOR I = 1 TO MAX
+      RECORD<-1> = \FOR A\ : I : \ = 1 TO 3\
+   NEXT I
+*
+   STR = \\
+   FOR I = 1 TO MAX
+      IF I = 1 THEN
+         STR = \X<-1> = OP<1,A\ : I : \>\
+      END ELSE
+         STR = STR : \ : OP<\ : I :\,A\ : I : \>\
+      END
+   NEXT I
+   RECORD<-1> = STR
+   
+   FOR I = MAX TO 1 STEP -1
+      RECORD<-1> = \NEXT A\:  I
+   NEXT I
+*
+   RECORD<-1> = 'PRINT X'
+*
+   FOR I = 1 TO DCOUNT(RECORD,@AM)
+      PRINT RECORD<I>
+      RECORD<I> = '{{ ' : RECORD<I> : ' }}'
+   NEXT I
+*
+   TEMPLATE = RECORD
+*TEMP    CALL RENDER(MAT ENV,ENV.SIZE,TEMPLATE,RESULT)
+*
+*TEMP    CONVERT CHAR(10) TO @AM IN RESULT
+*
+   RETURN
+*
+* END OF PROGRAM
+*
+   END
+*
