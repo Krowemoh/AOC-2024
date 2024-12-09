@@ -1,0 +1,177 @@
+*
+   GIT.FILENAME = 'AOC.2024.07'
+   GIT.REPO = 'https://github.com/Krowemoh/AOC-2024.git'
+*
+   EQU TRUE TO 1
+   EQU FALSE TO 0
+*
+   YEAR = 2024
+   DAY = 7
+*
+   AOC.ID = YEAR : '*' : DAY
+*
+   OPEN '','AOC-PUZZLE-FILE' TO AOC.PUZZLE.FILE ELSE
+      PRINT 'Unable to open file: AOC-PUZZLE-FILE - Press RETURN':
+      INPUT ANYTHING
+      STOP
+   END
+*
+   OPEN '','AOC-TEMP' TO AOC.TEMP.FILE ELSE
+      PRINT 'Unable to open file: AOC-TEMP':
+      STOP
+   END
+*
+   READ RAW.DATA FROM AOC.PUZZLE.FILE,AOC.ID ELSE
+      PRINT 'No Puzzle Input.'
+      STOP
+   END
+*
+   GOSUB TEST.DATA
+*
+*TEMP    GOSUB 100
+*
+   GOSUB 200
+*
+   STOP
+*
+*********************  S U B R O U T I N E  *********************
+*
+TEST.DATA:NULL
+*
+   RAW.DATA = ''
+*
+   RAW.DATA<-1> = '190: 10 19'
+   RAW.DATA<-1> = '3267: 81 40 27'
+   RAW.DATA<-1> = '83: 17 5'
+   RAW.DATA<-1> = '156: 15 6'
+   RAW.DATA<-1> = '7290: 6 8 6 15'
+   RAW.DATA<-1> = '161011: 16 10 13'
+   RAW.DATA<-1> = '192: 17 8 14'
+   RAW.DATA<-1> = '21037: 9 7 18 13'
+   RAW.DATA<-1> = '292: 11 6 16 20'
+*
+   RETURN
+*
+*********************  S U B R O U T I N E  *********************
+*
+100:NULL
+*
+   ANS = ''
+*
+   NUMBER.OF.LINES = DCOUNT(RAW.DATA,@AM)
+   MAX = 0
+*
+   FOR I = 1 TO NUMBER.OF.LINES
+      LINE = RAW.DATA<I>
+*
+      RESULT = FIELD(LINE,':',1)
+*
+      VALUES = TRIM(FIELD(LINE,':',2))
+      CONVERT ' ' TO @VM IN VALUES
+*
+      NUMBER.OF.VALUES = DCOUNT(VALUES,@VM)
+*
+      SLOTS = NUMBER.OF.VALUES - 1
+      READ OPTIONS FROM AOC.TEMP.FILE,SLOTS ELSE
+         PRINT 'GENERATE COMBOS FOR: ' : SLOTS
+         STOP
+      END
+*
+      NUMBER.OF.OPTIONS = DCOUNT(OPTIONS,@AM)
+*
+      FOR O.CTR = 1 TO NUMBER.OF.OPTIONS
+         OPTION = OPTIONS<O.CTR>
+         V = VALUES
+         T = VALUES<1,1>
+*
+         FOR L.CTR = 1 TO LEN(OPTION)
+            OP = OPTION[L.CTR,1]
+            V = CHANGE(V,@VM,OP,1)
+*
+            IF OP = '+' THEN
+               T = T + VALUES<1,L.CTR+1>
+*
+            END ELSE IF OP = '*' THEN
+               T = T * VALUES<1,L.CTR+1>
+            END
+*
+         NEXT L.CTR
+*
+         IF T = RESULT THEN
+            ANS = ANS + T
+            EXIT
+         END
+*
+      NEXT O.CTR
+   NEXT I
+*
+   PRINT 'Part 1 ANS: ' : ANS
+*
+   RETURN
+*
+*********************  S U B R O U T I N E  *********************
+*
+200:NULL
+*
+   ANS = ''
+*
+   NUMBER.OF.LINES = DCOUNT(RAW.DATA,@AM)
+   MAX = 0
+*
+   FOR I = 1 TO NUMBER.OF.LINES
+      LINE = RAW.DATA<I>
+*
+      RESULT = FIELD(LINE,':',1)
+*
+      VALUES = TRIM(FIELD(LINE,':',2))
+      CONVERT ' ' TO @VM IN VALUES
+*
+      NUMBER.OF.VALUES = DCOUNT(VALUES,@VM)
+*
+      SLOTS = NUMBER.OF.VALUES - 1
+      READ OPTIONS FROM AOC.TEMP.FILE,SLOTS ELSE
+         PRINT 'GENERATE COMBOS FOR: ' : SLOTS
+         STOP
+      END
+*
+      NUMBER.OF.OPTIONS = DCOUNT(OPTIONS,@AM)
+*
+      FOR O.CTR = 1 TO NUMBER.OF.OPTIONS
+         OPTION = OPTIONS<O.CTR>
+         V = VALUES
+         T = VALUES<1,1>
+*
+         FOR L.CTR = 1 TO LEN(OPTION)
+            OP = OPTION[L.CTR,1]
+            V = CHANGE(V,@VM,OP,1)
+*
+            IF OP = '+' THEN
+               T = T + VALUES<1,L.CTR+1>
+*
+            END ELSE IF OP = '*' THEN
+               T = T * VALUES<1,L.CTR+1>
+*
+            END ELSE IF OP = '|' THEN
+               T = T : VALUES<1,L.CTR+1>
+            END
+         NEXT L.CTR
+*
+         IF T = RESULT THEN
+            PRINT V : ' = ' : T
+            ANS = ANS + T
+            EXIT
+         END
+*
+      NEXT O.CTR
+   NEXT I
+*
+*TEMP    PRINT 'Max: ' : MAX
+   PRINT 'Part 2 ANS: ' : ANS
+*
+   RETURN
+*
+*
+* END OF PROGRAM
+*
+   END
+*
